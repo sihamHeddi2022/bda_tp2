@@ -4,6 +4,7 @@ import db.Database;
 import db.Ville;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -41,27 +42,42 @@ public class HelloController{
     @FXML
     private TableColumn<Ville,Integer> pV;
 
+    @FXML
+    private ListView exp50;
 
     private void  getVilleMoineAlgeria(){
+        idV.setCellValueFactory(new PropertyValueFactory<Ville,Integer>("iD"));
+        nameV.setCellValueFactory(new PropertyValueFactory<Ville,String>("Name"));
+        ccV.setCellValueFactory(new PropertyValueFactory<Ville,String>("CountryCode"));
+        dV.setCellValueFactory(new PropertyValueFactory<Ville,String>("District"));
+        pV.setCellValueFactory(new PropertyValueFactory<Ville,Integer>("Population"));
 
-       idV.setCellFactory(new PropertyValueFactory("ID"));
-        nameV.setCellFactory(new PropertyValueFactory("nameV"));
-        ccV.setCellFactory(new PropertyValueFactory("CountryCode"));
-        dV.setCellFactory(new PropertyValueFactory("District"));
-        pV.setCellFactory(new PropertyValueFactory("Population"));
 
         try {
             this.statement = this.con.createStatement();
-            this.resultSet = this.statement.executeQuery("SELECT * FROM world.city where CountryCode in (select Code from world.country where Name = \"Algeria\" ) order by Population asc limit 1");
+            this.resultSet = this.statement.executeQuery("SELECT * FROM world.city where CountryCode in (select Code from world.country where Name = \"Algeria\" ) order by Population asc limit 1;");
             this.resultSet.next();
-            moineVille.getItems().add(new Ville( this.resultSet.getInt("ID"),this.resultSet.getString("Name"),this.resultSet.getString("CountryCode"),this.resultSet.getString("District"),this.resultSet.getInt("Population")));
+            System.out.println(this.resultSet.getInt("ID"));
+            moineVille.getItems().add(new Ville(this.resultSet.getInt("ID"),this.resultSet.getString("Name"),this.resultSet.getString("CountryCode"),this.resultSet.getString("District"),this.resultSet.getInt("Population")));
+
 
         }catch (Exception exception){
             System.out.println(exception);
         }
-
     }
 
+    private void nomPayExp50(){
+        try {
+            this.statement = this.con.createStatement();
+            this.resultSet = this.statement.executeQuery("SELECT Name FROM world.country where LifeExpectancy < 50;");
+            while (this.resultSet.next()){
+                exp50.getItems().add(this.resultSet.getString("Name"));
+            }
+
+        }catch (Exception exception){
+            System.out.println(exception);
+        }
+    }
 
 
 
@@ -135,8 +151,13 @@ public class HelloController{
                                             La ville la moine peuplée du pays  << Algeria >>
                     ====================================================================================
            */
-        getVilleMoineAlgeria();
-
+       getVilleMoineAlgeria();
+             /*
+                    ====================================================================================
+                                 Les noms du pays ayant une expérience de vie inférieure à 50 ans
+                    ====================================================================================
+           */
+        nomPayExp50();
     }
 
 

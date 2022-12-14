@@ -22,7 +22,7 @@
         </columns>
       </TableView>
       <Label layoutX="39.0" layoutY="238.0" prefHeight="26.0" prefWidth="279.0" text="Toutes les villes du pays &lt;&lt; Algeria &gt;&gt; :" />
-      <TableView fx:id="villeA" layoutX="45.0" layoutY="273.0" prefHeight="303.0" prefWidth="522.0">
+      <TableView fx:id="villeA" layoutX="45.0" layoutY="273.0" prefHeight="163.0" prefWidth="522.0">
          <columns>
             <TableColumn text="ID" />
             <TableColumn prefWidth="129.0" text="Name" />
